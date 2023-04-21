@@ -18,7 +18,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     }
 
     @Override
-    protected ShortestPathSolution doRun() {
+    protected ShortestPathSolution doRun() { // O(m log(n))
         final ShortestPathData data = getInputData();
         ShortestPathSolution solution = null;
 
@@ -36,55 +36,46 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
         BinaryHeap<Label> labelsHeap = new BinaryHeap<Label>(); //Initialize heap of Labels
 
-        for(int i = 0; i < nbNodes; i++){ //Initialize all the labels indexed by Node ID
+        for(int i = 0; i < nbNodes; i++){ //Initialize all the labels indexed by Node ID // O(n)
             labels[graph.getNodes().get(i).getId()] = new Label(graph.getNodes().get(i),null);
         }
 
         labels[originID].setCurrentCost(0f);
         labelsHeap.insert(labels[originID]);
 
-        System.out.println("Before while");
-        while (!labelsHeap.isEmpty() && labels[destinationID].getMark() == false){
-            System.out.println("Before deleteMin");
+        while (!labelsHeap.isEmpty() && labels[destinationID].getMark() == false){ // O(m)
             Label x = labelsHeap.deleteMin();
             x.Mark();
-            System.out.println("before for");
             for(Arc z : x.getCurrentNode().getSuccessors()){
+                if (!data.isAllowed(z)) {
+                    continue;
+                }
                 Label y = labels[(z.getDestination().getId())]; // Label of successor
-                System.out.println("before if marked");
                 if(y.getMark() == false){ // If successor of x not marked
 
                     double oldDistance = y.getCurrentCost();
                     double newDistance = x.getCurrentCost() + data.getCost(z);
 
 
-                    System.out.println("Before if infinite distance");
                     if (Double.isInfinite(oldDistance) && Double.isFinite(newDistance)) {
                         notifyNodeReached(z.getDestination());
                     }
 
-                    System.out.println("Before if oldDist > newDist");
                     if(oldDistance > newDistance){ // If new distance shorter
                         y.setCurrentCost(newDistance);
-                        System.out.println("Before try");
                         try{ // Update or insert y in the heap
-                            System.out.println("Before remove");
                             labelsHeap.remove(y);
-                            System.out.println("after remove");
                         }catch(ElementNotFoundException e){
                             ;
                         }
                         labelsHeap.insert(y);
                         y.setParent(z);
-                        System.out.println("After catch");
 
                     }
 
-                    System.out.println("After if oldDist > newDist");
                 }
             }
         }
-        System.out.println("End of While");
 
         // Destination has no predecessor, the solution is infeasible...
         if (labels[data.getDestination().getId()].getParent() == null) {
@@ -109,8 +100,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             // Create the final solution.
             solution = new ShortestPathSolution(data, AbstractSolution.Status.OPTIMAL, new Path(graph, arcs));
         }
-
-        System.out.println("End of function");
 
 
         return solution;

@@ -71,7 +71,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
      * 
      * @param index Index at which the percolate begins.
      */
-    private void percolateUp(int index) {
+    private void percolateUp(int index) { // O(log(n)) ?
         E x = this.array.get(index);
 
         for (; index > 0
@@ -89,7 +89,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
      * 
      * @param index Index at which the percolate begins.
      */
-    private void percolateDown(int index) {
+    private void percolateDown(int index) { // O(log(n)) ?
         int ileft = indexLeft(index);
         int iright = ileft + 1;
 
@@ -129,15 +129,14 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     }
 
     @Override
-    public void insert(E x) {
+    public void insert(E x) { // O(log(n))
         int index = this.currentSize++;
         this.arraySet(index, x);
         this.percolateUp(index);
     }
 
     @Override
-    public void remove(E x) throws ElementNotFoundException {
-        // TODO:
+    public void remove(E x) throws ElementNotFoundException { // O(log(n))
 
         int rmIndex = this.array.indexOf(x);
         if(rmIndex == -1 || rmIndex >= this.currentSize){throw new ElementNotFoundException(x);}
