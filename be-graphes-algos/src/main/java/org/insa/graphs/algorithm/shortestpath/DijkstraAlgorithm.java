@@ -44,7 +44,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         labelsHeap.insert(labels[originID]);
 
         System.out.println("Before while");
-        while (!labelsHeap.isEmpty() || labels[destinationID].getMark() == false){
+        while (!labelsHeap.isEmpty() && labels[destinationID].getMark() == false){
             System.out.println("Before deleteMin");
             Label x = labelsHeap.deleteMin();
             x.Mark();
