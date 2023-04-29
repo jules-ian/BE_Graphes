@@ -74,7 +74,17 @@ public class Label implements Comparable<Label>{
      */
     @Override
     public int compareTo(Label other) {
-        return Double.compare(this.currentCost, other.getCurrentCost());
+        int result = Double.compare(this.getCost(), other.getCost());
+            if(result == 0 && this.getCostToDestination() < other.getCostToDestination()){
+                result = -1;
+            }else if(result == 0 && this.getCostToDestination() > other.getCostToDestination()){
+                result = 1;
+            }
+        return result;
+    }
+
+    private double getCostToDestination() { //necessary to make compareTo work
+        return 0.0;
     }
 
 }

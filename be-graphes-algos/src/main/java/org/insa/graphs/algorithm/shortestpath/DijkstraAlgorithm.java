@@ -24,11 +24,14 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
         Graph graph = data.getGraph();
         final int nbNodes = graph.size();
+
         Node origin = data.getOrigin();
         int originID = origin.getId();
-        int destinationID = data.getDestination().getId();
 
-        notifyOriginProcessed(data.getOrigin());
+        Node destination = data.getDestination();
+        int destinationID = destination.getId();
+
+        notifyOriginProcessed(origin);
 
 
         Label[] labels = new Label[nbNodes]; //Initialize array of Labels
