@@ -82,12 +82,19 @@ public class Launch {
 
          */
 
-        int nbTests = 100;
+        int nbTests = 10;
         Random rand = new Random();
+// On my computer use these :
+        String carteInsa = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/insa.mapgr";
+        String carteTls = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/toulouse.mapgr";
+        String carteCarreDense = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/bordeaux.mapgr";
 
+// At insa use these :
+        /*
         String carteInsa = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
         String carteTls = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/toulouse.mapgr";
         String carteCarreDense = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/bordeaux.mapgr";
+         */
 
         // Create a graph readers.
         final GraphReader readerInsa = new BinaryGraphReader(
@@ -148,8 +155,8 @@ public class Launch {
 
                 // Test if Dijkstra is correct
                 if (BFSol.getStatus() == dijkstraSol.getStatus() && dijkstraSol.getStatus() == AbstractSolution.Status.FEASIBLE || dijkstraSol.getStatus() == AbstractSolution.Status.OPTIMAL) {
+                    System.out.println("Length of the solution : " + dijkstraSol.getPath().getLength());
                     if (Math.abs(dijkstraSol.getPath().getLength() - BFSol.getPath().getLength()) < EPSILON) {
-                        System.out.println("Length of the solution : " + dijkstraSol.getPath().getLength());
                         System.out.println("===== Dijkstra Ok =====");
                         dijkstraOK++;
                     } else {
@@ -169,8 +176,8 @@ public class Launch {
 
                 // Test if A* is correct
                 if (BFSol.getStatus() == AStarSol.getStatus() && AStarSol.getStatus() == AbstractSolution.Status.FEASIBLE || AStarSol.getStatus() == AbstractSolution.Status.OPTIMAL) {
+                    System.out.println("Length of the solution : " + AStarSol.getPath().getLength());
                     if (Math.abs(AStarSol.getPath().getLength() - BFSol.getPath().getLength()) < EPSILON) {
-                        System.out.println("Length of the solution : " + AStarSol.getPath().getLength());
                         System.out.println("===== A* Ok =====");
                         AStarOK++;
                     } else {
