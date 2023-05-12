@@ -40,15 +40,20 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         BinaryHeap<Label> labelsHeap = new BinaryHeap<Label>(); //Initialize heap of Labels
 
         for(int i = 0; i < nbNodes; i++){ //Initialize all the labels indexed by Node ID // O(n)
-            labels[graph.getNodes().get(i).getId()] = new Label(graph.getNodes().get(i),null);
+            createLabel(graph, labels, i);
         }
 
         labels[originID].setCurrentCost(0f);
         labelsHeap.insert(labels[originID]);
+        Label w = null;
 
         while (!labelsHeap.isEmpty() && labels[destinationID].getMark() == false){ // O(m)
             Label x = labelsHeap.deleteMin();
+            if(w != null){System.out.println(w.getCurrentCost()<=x.getCurrentCost());}
+            w = x;
+            System.out.println("Node : " + x.getID() + "   Cost :" + x.getCurrentCost());
             x.Mark();
+            notifyNodeMarked(x.getCurrentNode());
             for(Arc z : x.getCurrentNode().getSuccessors()){
                 if (!data.isAllowed(z)) {
                     continue;
@@ -65,12 +70,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                     }
 
                     if(oldDistance > newDistance){ // If new distance shorter
-                        y.setCurrentCost(newDistance);
                         try{ // Update or insert y in the heap
                             labelsHeap.remove(y);
                         }catch(ElementNotFoundException e){
                             ;
                         }
+                        y.setCurrentCost(newDistance);
                         labelsHeap.insert(y);
                         y.setParent(z);
 
@@ -107,5 +112,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
         return solution;
     }
+
+    void createLabel(Graph graph, Label[] labels, int i){
+        labels[graph.getNodes().get(i).getId()] = new Label(graph.getNodes().get(i),null);
+    }
+
 
 }

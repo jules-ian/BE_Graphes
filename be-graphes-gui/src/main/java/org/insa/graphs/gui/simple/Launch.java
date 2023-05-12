@@ -82,20 +82,22 @@ public class Launch {
 
          */
 
-        int nbTests = 10;
+        int nbTests = 100;
         int algoToTest = 1; // 0 for Dijktra, 1 for A*, 2 for both
         Random rand = new Random();
 // On my computer use these :
+        /*
         String carteInsa = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/insa.mapgr";
         String carteTls = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/toulouse.mapgr";
         String carteCarreDense = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/bordeaux.mapgr";
 
+         */
+
 // At insa use these :
-        /*
         String carteInsa = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
         String carteTls = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/toulouse.mapgr";
         String carteCarreDense = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/bordeaux.mapgr";
-         */
+
 
         // Create a graph readers.
         final GraphReader readerInsa = new BinaryGraphReader(
@@ -114,6 +116,7 @@ public class Launch {
 
         int dijkstraOK = 0;
         int AStarOK = 0;
+        int totalAStarOK = 0;
 
         for (ArcInspector a : ArcInspectorFactory.getAllFilters()) {
             for(int i = 0; i < nbTests ; i++) {
@@ -159,12 +162,14 @@ public class Launch {
                         if (Math.abs(AStarSol.getPath().getLength() - BFSol.getPath().getLength()) < EPSILON) {
                             System.out.println("===== A* Ok =====");
                             AStarOK++;
+                            totalAStarOK++;
                         } else {
                             System.out.println("===== A* not ok =====");
                         }
                     } else if (BFSol.getStatus() == AStarSol.getStatus()) {
                         System.out.println("===== A* Ok =====");
                         AStarOK++;
+                        totalAStarOK++;
                     } else {
                         System.out.println("===== A* not ok =====");
                     }
@@ -213,6 +218,12 @@ public class Launch {
             }
             dijkstraOK = 0;
             AStarOK = 0;
+            //break;
+        }
+
+        if(algoToTest == 1 || algoToTest == 2) {
+            System.out.println("=====================================================");
+            System.out.println(totalAStarOK + "/" + nbTests*ArcInspectorFactory.getAllFilters().size() + " A* are OK");
         }
     }
 

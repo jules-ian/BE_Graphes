@@ -83,7 +83,7 @@ public class Label implements Comparable<Label>{
         return result;
     }
 
-    private double getCostToDestination() { //necessary to make compareTo work
+    public double getCostToDestination() { //necessary to make compareTo work
         return 0.0;
     }
 

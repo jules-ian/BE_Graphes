@@ -1,0 +1,12 @@
+Map : Bordeaux
+Origin : 9192
+Destination : 10882
+
+====== BellmannFord ======
+Status of the solution : OPTIMAL
+Length of the solution : 6037.6396
+
+======== A* ========
+Status of the solution : OPTIMAL
+Length of the solution : 6038.253
+===== A* not ok =====

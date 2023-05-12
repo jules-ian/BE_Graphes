@@ -11,7 +11,7 @@ public class LabelStar extends Label implements Comparable<Label> {
         super(node, parent);
         this.costToDestination = costToDestination;
     }
-
+    @Override
     public double getCostToDestination(){
         return this.costToDestination;
     }
