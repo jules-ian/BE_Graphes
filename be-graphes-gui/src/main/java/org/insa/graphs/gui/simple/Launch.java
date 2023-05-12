@@ -26,7 +26,7 @@ import org.insa.graphs.model.io.PathReader;
 
 public class Launch {
 
-    static final double EPSILON = 0.01;
+    static final double EPSILON = 0.001;
     /**
      * Create a new Drawing inside a JFrame an return it.
      * 
@@ -83,6 +83,7 @@ public class Launch {
          */
 
         int nbTests = 10;
+        int algoToTest = 1; // 0 for Dijktra, 1 for A*, 2 for both
         Random rand = new Random();
 // On my computer use these :
         String carteInsa = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/insa.mapgr";
@@ -127,14 +128,10 @@ public class Launch {
                 ShortestPathData data = new ShortestPathData(graph, origin, dest, a);
 
                 // Initialisation of the algorithms
-                DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(data);
                 BellmanFordAlgorithm BF = new BellmanFordAlgorithm(data);
-                AStarAlgorithm AStar = new AStarAlgorithm(data);
-
-                // Run the algorithms
-                ShortestPathSolution dijkstraSol = dijkstra.run();
                 ShortestPathSolution BFSol = BF.run();
-                ShortestPathSolution AStarSol = AStar.run();
+
+
 
                 // Print Info
                 System.out.println("Map : " + graph.getMapName());
@@ -149,54 +146,71 @@ public class Launch {
                 }
                 System.out.println();
 
-                System.out.println("======= Dijkstra =======");
-                System.out.println("Status of the solution : " + dijkstraSol.getStatus().name());
+                if(algoToTest == 1 || algoToTest == 2) {
+                    AStarAlgorithm AStar = new AStarAlgorithm(data);
+                    ShortestPathSolution AStarSol = AStar.run();
 
+                    System.out.println("======== A* ========");
+                    System.out.println("Status of the solution : " + AStarSol.getStatus().name());
 
-                // Test if Dijkstra is correct
-                if (BFSol.getStatus() == dijkstraSol.getStatus() && dijkstraSol.getStatus() == AbstractSolution.Status.FEASIBLE || dijkstraSol.getStatus() == AbstractSolution.Status.OPTIMAL) {
-                    System.out.println("Length of the solution : " + dijkstraSol.getPath().getLength());
-                    if (Math.abs(dijkstraSol.getPath().getLength() - BFSol.getPath().getLength()) < EPSILON) {
-                        System.out.println("===== Dijkstra Ok =====");
-                        dijkstraOK++;
-                    } else {
-                        System.out.println("===== Dijkstra not ok =====");
-                    }
-                } else if (BFSol.getStatus() == dijkstraSol.getStatus()) {
-                    System.out.println("===== Dijkstra Ok =====");
-                    dijkstraOK++;
-                } else {
-                    System.out.println("===== Dijkstra not ok =====");
-                }
-                System.out.println();
-
-
-                System.out.println("======== A* ========");
-                System.out.println("Status of the solution : " + AStarSol.getStatus().name());
-
-                // Test if A* is correct
-                if (BFSol.getStatus() == AStarSol.getStatus() && AStarSol.getStatus() == AbstractSolution.Status.FEASIBLE || AStarSol.getStatus() == AbstractSolution.Status.OPTIMAL) {
-                    System.out.println("Length of the solution : " + AStarSol.getPath().getLength());
-                    if (Math.abs(AStarSol.getPath().getLength() - BFSol.getPath().getLength()) < EPSILON) {
+                    // Test if A* is correct
+                    if (BFSol.getStatus() == AStarSol.getStatus() && AStarSol.getStatus() == AbstractSolution.Status.FEASIBLE || AStarSol.getStatus() == AbstractSolution.Status.OPTIMAL) {
+                        System.out.println("Length of the solution : " + AStarSol.getPath().getLength());
+                        if (Math.abs(AStarSol.getPath().getLength() - BFSol.getPath().getLength()) < EPSILON) {
+                            System.out.println("===== A* Ok =====");
+                            AStarOK++;
+                        } else {
+                            System.out.println("===== A* not ok =====");
+                        }
+                    } else if (BFSol.getStatus() == AStarSol.getStatus()) {
                         System.out.println("===== A* Ok =====");
                         AStarOK++;
                     } else {
                         System.out.println("===== A* not ok =====");
                     }
-                } else if (BFSol.getStatus() == AStarSol.getStatus()) {
-                    System.out.println("===== A* Ok =====");
-                    AStarOK++;
-                } else {
-                    System.out.println("===== A* not ok =====");
+                    System.out.println();
                 }
-                System.out.println();
+                if(algoToTest == 0 || algoToTest == 2) {
+                    DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(data);
+                    ShortestPathSolution dijkstraSol = dijkstra.run();
+
+                    System.out.println("======= Dijkstra =======");
+                    System.out.println("Status of the solution : " + dijkstraSol.getStatus().name());
+
+
+                    // Test if Dijkstra is correct
+                    if (BFSol.getStatus() == dijkstraSol.getStatus() && dijkstraSol.getStatus() == AbstractSolution.Status.FEASIBLE || dijkstraSol.getStatus() == AbstractSolution.Status.OPTIMAL) {
+                        System.out.println("Length of the solution : " + dijkstraSol.getPath().getLength());
+                        if (Math.abs(dijkstraSol.getPath().getLength() - BFSol.getPath().getLength()) < EPSILON) {
+                            System.out.println("===== Dijkstra Ok =====");
+                            dijkstraOK++;
+                        } else {
+                            System.out.println("===== Dijkstra not ok =====");
+                        }
+                    } else if (BFSol.getStatus() == dijkstraSol.getStatus()) {
+                        System.out.println("===== Dijkstra Ok =====");
+                        dijkstraOK++;
+                    } else {
+                        System.out.println("===== Dijkstra not ok =====");
+                    }
+                    System.out.println();
+                }
+
+
+
+
+
 
 
             }
             System.out.println("--------------------------------------------------------");
             System.out.println("Filter : " + a);
-            System.out.println(dijkstraOK + "/" + nbTests + " Dijkstra are OK");
-            System.out.println(AStarOK + "/" + nbTests + " A* are OK");
+            if(algoToTest == 0 || algoToTest == 2) {
+                System.out.println(dijkstraOK + "/" + nbTests + " Dijkstra are OK");
+            }
+            if(algoToTest == 1 || algoToTest == 2) {
+                System.out.println(AStarOK + "/" + nbTests + " A* are OK");
+            }
             dijkstraOK = 0;
             AStarOK = 0;
         }
