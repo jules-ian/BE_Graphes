@@ -17,12 +17,14 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         super(data);
     }
 
+
+    final ShortestPathData data = getInputData();
+    Graph graph = data.getGraph();
+
     @Override
     protected ShortestPathSolution doRun() { // O(m log(n))
-        final ShortestPathData data = getInputData();
         ShortestPathSolution solution = null;
 
-        Graph graph = data.getGraph();
         final int nbNodes = graph.size();
 
         Node origin = data.getOrigin();
@@ -43,23 +45,20 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             createLabel(graph, labels, i);
         }
 
-        labels[originID].setCurrentCost(0f);
+        labels[originID].setCurrentCost(0);
         labelsHeap.insert(labels[originID]);
         Label w = null;
 
         while (!labelsHeap.isEmpty() && labels[destinationID].getMark() == false){ // O(m)
             Label x = labelsHeap.deleteMin();
-            if(w != null){System.out.println(w.getCurrentCost()<=x.getCurrentCost());}
-            w = x;
-            System.out.println("Node : " + x.getID() + "   Cost :" + x.getCurrentCost());
             x.Mark();
             notifyNodeMarked(x.getCurrentNode());
             for(Arc z : x.getCurrentNode().getSuccessors()){
                 if (!data.isAllowed(z)) {
                     continue;
                 }
-                Label y = labels[(z.getDestination().getId())]; // Label of successor
-                if(y.getMark() == false){ // If successor of x not marked
+                Label y = labels[z.getDestination().getId()]; // Label of successor
+                if(!y.getMark()){ // If successor of x not marked
 
                     double oldDistance = y.getCurrentCost();
                     double newDistance = x.getCurrentCost() + data.getCost(z);
@@ -68,12 +67,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                     if (Double.isInfinite(oldDistance) && Double.isFinite(newDistance)) {
                         notifyNodeReached(z.getDestination());
                     }
-
                     if(oldDistance > newDistance){ // If new distance shorter
-                        try{ // Update or insert y in the heap
+
+                        if(Double.isFinite(oldDistance)) {// Update or insert y in the heap
                             labelsHeap.remove(y);
-                        }catch(ElementNotFoundException e){
-                            ;
                         }
                         y.setCurrentCost(newDistance);
                         labelsHeap.insert(y);

@@ -17,6 +17,10 @@ public class Label implements Comparable<Label>{
         this.currentCost = Double.POSITIVE_INFINITY;
     }
 
+    public String toString(){
+        return "ID : " + this.currentNode.getId() + "  Mark : " + mark + "  Cost : " + currentCost;
+    }
+
     public Node getCurrentNode(){
         return this.currentNode;
     }

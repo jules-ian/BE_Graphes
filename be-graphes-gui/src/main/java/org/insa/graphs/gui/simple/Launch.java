@@ -82,21 +82,23 @@ public class Launch {
 
          */
 
-        int nbTests = 100;
+        int nbTests = 200;
         int algoToTest = 1; // 0 for Dijktra, 1 for A*, 2 for both
         Random rand = new Random();
 // On my computer use these :
-        /*
+        ///*
         String carteInsa = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/insa.mapgr";
         String carteTls = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/toulouse.mapgr";
         String carteCarreDense = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/bordeaux.mapgr";
 
-         */
+         //*/
 
 // At insa use these :
+        /*
         String carteInsa = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
         String carteTls = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/toulouse.mapgr";
         String carteCarreDense = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/bordeaux.mapgr";
+        */
 
 
         // Create a graph readers.
@@ -112,11 +114,13 @@ public class Launch {
         final Graph graphTls = readerTls.read();
         final Graph graphCD = readerCD.read();
 
-        Graph [] graphes = {graphCD, graphInsa, graphTls};
+        //Graph [] graphes = {graphCD, graphInsa, graphTls};
+        Graph [] graphes = {graphInsa};
 
         int dijkstraOK = 0;
         int AStarOK = 0;
         int totalAStarOK = 0;
+        int totalDijOK = 0;
 
         for (ArcInspector a : ArcInspectorFactory.getAllFilters()) {
             for(int i = 0; i < nbTests ; i++) {
@@ -189,12 +193,14 @@ public class Launch {
                         if (Math.abs(dijkstraSol.getPath().getLength() - BFSol.getPath().getLength()) < EPSILON) {
                             System.out.println("===== Dijkstra Ok =====");
                             dijkstraOK++;
+                            totalDijOK++;
                         } else {
                             System.out.println("===== Dijkstra not ok =====");
                         }
                     } else if (BFSol.getStatus() == dijkstraSol.getStatus()) {
                         System.out.println("===== Dijkstra Ok =====");
                         dijkstraOK++;
+                        totalDijOK++;
                     } else {
                         System.out.println("===== Dijkstra not ok =====");
                     }
@@ -221,9 +227,12 @@ public class Launch {
             //break;
         }
 
+        System.out.println("========================= Total ============================");
         if(algoToTest == 1 || algoToTest == 2) {
-            System.out.println("=====================================================");
             System.out.println(totalAStarOK + "/" + nbTests*ArcInspectorFactory.getAllFilters().size() + " A* are OK");
+        }
+        if(algoToTest == 0 || algoToTest == 2) {
+            System.out.println(totalDijOK + "/" + nbTests*ArcInspectorFactory.getAllFilters().size() + " Dijkstra are OK");
         }
     }
 

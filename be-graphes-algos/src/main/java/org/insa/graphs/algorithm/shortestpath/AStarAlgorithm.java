@@ -17,14 +17,18 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     }
 
     void createLabel(Graph graph, Label[] labels, int i){
-        final ShortestPathData data = getInputData();
 
         Node destination = data.getDestination();
+
+        double maxGraphSpeed = 130;
 
         if(data.getMode() == LENGTH){
             labels[graph.getNodes().get(i).getId()] = new LabelStar(graph.getNodes().get(i),null, Point.distance(destination.getPoint(), graph.getNodes().get(i).getPoint()));
         }else{
-            labels[graph.getNodes().get(i).getId()] = new LabelStar(graph.getNodes().get(i),null, Point.distance(destination.getPoint(), graph.getNodes().get(i).getPoint())/(80.0*3.6));
+            if (graph.getGraphInformation().hasMaximumSpeed()){
+            maxGraphSpeed = graph.getGraphInformation().getMaximumSpeed();
+        }
+            labels[graph.getNodes().get(i).getId()] = new LabelStar(graph.getNodes().get(i),null, Point.distance(destination.getPoint(), graph.getNodes().get(i).getPoint())/(maxGraphSpeed*3.6));
         }
     }
 }
