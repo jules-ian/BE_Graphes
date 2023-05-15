@@ -1,0 +1,18 @@
+================================ Marathon ======================================
+
+Contraintes circuit :
+
+Longueur chemin L = 42 195 m +- 20m
+Sommet destination D proche du sommet d'origine O (~ 50m)
+Toutes routes (arrêtes) acceptées (filtre sans autoroute éventuellement)
+
+Solutions envisagées :
+
+- Exploration Libre du graphe jusqu'à L/2 puis PCC jusqu'au sommet de départ => longueur L pas garantie
+- EL jusqu'à un sommet à la distance L/2 puis retour => aller-retour au lieu d'une boucle
+- EL jusqu'à un sommet à la distance L/3 puis autre EL L/3 vers autre sommet != origine puis PCC vers origine => longueur L pas garantie
+- Utiliser algo de PCC de O vers D avec longueur minimale => comment implémenter ?
+- Chemin de O à D aléatoire jusqu'à en trouver un de la bonne longueur => peut être très long...
+
+- Recherche Isochrones L/3 +- e  à partir de O  => ensemble I d'isochrones
+                                                => recherche Isochrones L/3 +- e à partir de i€I vers j€I

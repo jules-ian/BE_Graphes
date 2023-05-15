@@ -3,17 +3,14 @@ package org.insa.graphs.algorithm.shortestpath;
 import org.insa.graphs.algorithm.AbstractSolution;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.algorithm.utils.ElementNotFoundException;
-import org.insa.graphs.model.Arc;
-import org.insa.graphs.model.Graph;
-import org.insa.graphs.model.Node;
-import org.insa.graphs.model.Path;
+import org.insa.graphs.model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class DijkstraAlgorithm extends ShortestPathAlgorithm {
+public class MarathonAlgorithm extends ShortestPathAlgorithm {
 
-    public DijkstraAlgorithm(ShortestPathData data) {
+    public MarathonAlgorithm(ShortestPathData data) {
         super(data);
     }
 
@@ -30,8 +27,16 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Node origin = data.getOrigin();
         int originID = origin.getId();
 
-        Node destination = data.getDestination();
-        int destinationID = destination.getId();
+        final double DIST = 42195;
+        final double EPSILON = 100;
+
+        //Node destination = data.getDestination();
+        //int destinationID = destination.getId();
+        //if(Point.distance(origin.getPoint(),destination.getPoint()) > 100){ // Si les sommets de départ et d'arrivé ne sont pas assez proches
+        //    System.out.println("Veuillez choisir des sommets à proximité svp.");
+        //
+        //    return new ShortestPathSolution(data, AbstractSolution.Status.INFEASIBLE);
+        //}
 
         notifyOriginProcessed(origin);
 
@@ -48,7 +53,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         labels[originID].setCurrentCost(0);
         labelsHeap.insert(labels[originID]);
 
-        while (!labelsHeap.isEmpty() && labels[destinationID].getMark() == false){ // O(m)
+        while (!labelsHeap.isEmpty() ){ // O(m)
             Label x = labelsHeap.deleteMin();
             x.Mark();
             notifyNodeMarked(x.getCurrentNode());
@@ -81,6 +86,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             }
         }
 
+        ArrayList<Label> Isochrons = isochronSearch(labels, )
+
         // Destination has no predecessor, the solution is infeasible...
         if (labels[data.getDestination().getId()].getParent() == null) {
             solution = new ShortestPathSolution(data, AbstractSolution.Status.INFEASIBLE);
@@ -111,6 +118,16 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     void createLabel(Graph graph, Label[] labels, int i){
         labels[graph.getNodes().get(i).getId()] = new Label(graph.getNodes().get(i),null);
+    }
+
+    private ArrayList<Label> isochronSearch(Label[] labels, double dist, double epsilon){
+        ArrayList<Label> result = new ArrayList<>();
+        for(Label l : labels){
+            if(l.getCurrentCost() >= dist - epsilon && l.getCurrentCost() <= dist + epsilon){
+                result.add(l);
+            }
+        }
+        return result;
     }
 
 
