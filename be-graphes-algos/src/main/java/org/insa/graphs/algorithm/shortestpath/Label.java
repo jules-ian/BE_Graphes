@@ -63,7 +63,7 @@ public class Label implements Comparable<Label>{
         if (other == null) {
             return false;
         }
-        if (other instanceof Node) {
+        if (other instanceof Label) {
             return this.currentNode.getId() == ((Label) other).getCurrentNode().getId();
         }
         return false;

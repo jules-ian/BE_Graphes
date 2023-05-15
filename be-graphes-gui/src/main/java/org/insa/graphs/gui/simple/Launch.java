@@ -83,22 +83,23 @@ public class Launch {
          */
 
         int nbTests = 200;
-        int algoToTest = 1; // 0 for Dijktra, 1 for A*, 2 for both
+        int algoToTest = 0; // 0 for Dijktra, 1 for A*, 2 for both
         Random rand = new Random();
 // On my computer use these :
-        ///*
+        /*
         String carteInsa = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/insa.mapgr";
         String carteTls = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/toulouse.mapgr";
         String carteCarreDense = "C:\\Users\\jules\\Desktop\\Graphes\\BE_Graphes\\Maps/bordeaux.mapgr";
 
-         //*/
+         */
 
 // At insa use these :
-        /*
+        ///*
         String carteInsa = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
         String carteTls = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/toulouse.mapgr";
-        String carteCarreDense = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/bordeaux.mapgr";
-        */
+        String carteCarreDense = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/carre-dense.mapgr";
+        String carteBordeaux = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/bordeaux.mapgr";
+        //*/
 
 
         // Create a graph readers.
@@ -108,14 +109,17 @@ public class Launch {
                 new DataInputStream(new BufferedInputStream(new FileInputStream(carteTls))));
         final GraphReader readerCD = new BinaryGraphReader(
                 new DataInputStream(new BufferedInputStream(new FileInputStream(carteCarreDense))));
+        final GraphReader readerBd = new BinaryGraphReader(
+                new DataInputStream(new BufferedInputStream(new FileInputStream(carteBordeaux))));
 
         // Read the graph.
         final Graph graphInsa = readerInsa.read();
         final Graph graphTls = readerTls.read();
         final Graph graphCD = readerCD.read();
+        final Graph graphBd = readerBd.read();
 
-        //Graph [] graphes = {graphCD, graphInsa, graphTls};
-        Graph [] graphes = {graphInsa};
+        Graph [] graphes = {graphInsa, graphTls, graphBd};
+        //Graph [] graphes = {graphInsa};
 
         int dijkstraOK = 0;
         int AStarOK = 0;
