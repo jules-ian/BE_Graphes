@@ -38,6 +38,10 @@ public abstract class AbstractInputData {
         this.arcInspector = arcInspector;
     }
 
+    public ArcInspector getArcInspector(){
+        return this.arcInspector;
+    }
+
     /**
      * @return Graph associated with this input.
      */

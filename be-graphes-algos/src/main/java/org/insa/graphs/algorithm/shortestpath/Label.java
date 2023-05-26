@@ -57,6 +57,10 @@ public class Label implements Comparable<Label>{
         this.mark = true;
     }
 
+    public void Unmark(){
+        this.mark = false;
+    }
+
 
     @Override
     public boolean equals(Object other) {
