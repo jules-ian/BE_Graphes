@@ -29,7 +29,7 @@ public class MarathonAlgorithm extends ShortestPathAlgorithm {
         int originID = origin.getId();
 
         final double DIST = 42195;
-        final double EPSILON = 100;
+        final double EPSILON = data.getDestination().getId();
 
 
 
