@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
-
+    public static long initTime = 0;
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
     }
@@ -39,16 +39,23 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Label[] labels = new Label[nbNodes]; //Initialize array of Labels
 
 
+
         BinaryHeap<Label> labelsHeap = new BinaryHeap<Label>(); //Initialize heap of Labels
 
+        long startTimeD = System.currentTimeMillis();
         for(int i = 0; i < nbNodes; i++){ //Initialize all the labels indexed by Node ID // O(n)
             createLabel(graph, labels, i);
         }
 
+        long endTimeD = System.currentTimeMillis();
+        long DijkstraTime = endTimeD - startTimeD;
+        addTime(DijkstraTime);
+        System.out.println("Initialization time : " + DijkstraTime + " ms");
+
         labels[originID].setCurrentCost(0);
         labelsHeap.insert(labels[originID]);
 
-        while (!labelsHeap.isEmpty() && labels[destinationID].getMark() == false){ // O(m)
+        while (!labelsHeap.isEmpty() && labels[destinationID].getMark() == false){ // O(m*log(n))
             Label x = labelsHeap.deleteMin();
             x.Mark();
             notifyNodeMarked(x.getCurrentNode());
@@ -113,5 +120,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         labels[graph.getNodes().get(i).getId()] = new Label(graph.getNodes().get(i),null);
     }
 
+    void addTime(long time){
+        DijkstraAlgorithm.initTime+= time;
+    }
 
 }

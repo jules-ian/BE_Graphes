@@ -12,6 +12,7 @@ import static org.insa.graphs.algorithm.AbstractInputData.Mode.LENGTH;
 
 public class AStarAlgorithm extends DijkstraAlgorithm {
 
+    public static long initTime = 0;
     public AStarAlgorithm(ShortestPathData data) {
         super(data);
     }
@@ -19,16 +20,20 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     void createLabel(Graph graph, Label[] labels, int i){
 
         Node destination = data.getDestination();
+        Node current = graph.getNodes().get(i);
 
-        double maxGraphSpeed = 130;
+        int maxGraphSpeed = 130;
 
         if(data.getMode() == LENGTH){
-            labels[graph.getNodes().get(i).getId()] = new LabelStar(graph.getNodes().get(i),null, Point.distance(destination.getPoint(), graph.getNodes().get(i).getPoint()));
+            labels[current.getId()] = new LabelStar(current,null, Point.distance(destination.getPoint(), current.getPoint()));
         }else{
             if (graph.getGraphInformation().hasMaximumSpeed()){
-            maxGraphSpeed = graph.getGraphInformation().getMaximumSpeed();
+                maxGraphSpeed = graph.getGraphInformation().getMaximumSpeed(); //if Maximum speed available use it otherwise use 130km/h
+            }
+            labels[current.getId()] = new LabelStar(current,null, Point.distance(destination.getPoint(), current.getPoint())/(maxGraphSpeed*3.6));
         }
-            labels[graph.getNodes().get(i).getId()] = new LabelStar(graph.getNodes().get(i),null, Point.distance(destination.getPoint(), graph.getNodes().get(i).getPoint())/(maxGraphSpeed*3.6));
-        }
+    }
+    void addTime(long time){
+        AStarAlgorithm.initTime+= time;
     }
 }
